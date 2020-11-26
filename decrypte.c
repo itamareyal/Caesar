@@ -10,12 +10,16 @@ Decryption or encryption of txt by key.
 #include <stdio.h>
 
 
-char* decrypte_line(char* line, long key) {
+char* decrypte_line(char* line, long key, char mode) {
 
-    int i;
+    int i, mode_sign;
     char ch;
     size_t len = strlen(line);
 
+    if (mode == 'd') mode_sign = 1;
+    else { mode_sign = -1; }
+
+    key *= mode_sign;
 
     for (i = 0; i < len - 1; i++) {
         ch = *(line + i);

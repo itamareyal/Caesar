@@ -142,9 +142,13 @@
     <ClCompile Include="decrypte.c" />
     <ClCompile Include="io.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="threadManager.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="decrypte.h" />
+    <ClInclude Include="HardCodedData.h" />
+    <ClInclude Include="io.h" />
+    <ClInclude Include="threadManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt" />

@@ -24,9 +24,21 @@
     <ClCompile Include="io.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="threadManager.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="decrypte.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HardCodedData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="io.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="threadManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

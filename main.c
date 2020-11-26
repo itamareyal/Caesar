@@ -1,125 +1,89 @@
+/*
+main.c
+----------------------------------------------------------------------------
+AUTHORS - Itamar Eyal 302309539 and Eran Weil 204051353
+
+PROJECT - CAESAR
+
+DESCRIPTION - this program can decrypte or encrypte a text using the Caesar system given a specific key.
+
+*/
+
+
 #include <Windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <math.h>
+#include "HardCodedData.h"
+#include "io.h"
+#include "decrypte.h"
 
-#define STATUS_CODE_FAILURE -2 
-#define SUCCESS_CODE 0 
-#define INITIAL_SIZE 10
-#define ERROR_CODE_FILE -3
 
 
-FILE* open_file(FILE* file, char* file_name, char* file_open_type)
-{
-    errno_t retval;
-    // Open file
-    retval = fopen_s(&file, file_name, file_open_type);
-    if (0 != retval)
-    {
-        printf("Failed to open file: %s\n", file_name);
-        return file;
+void error_handler(int err_code) {
+    printf("\n----------ERROR----------\n");
+    switch (err_code) {
+    case -1: {
+        printf("\tFailiure.");
+        break;
     }
-    return file;
+    case -2: {
+        printf("\tError with file handeling.");
+        break;
+    }
+    case -3: {
+        printf("\tError writing to the output file.");
+        break;
+    }
+    case -4: {
+        printf("Incorrect number of arguments. %d requird.", ARGS_REQUIRED - 1);
+        break;
+    }
+    default: printf("\tFailiure.");
+    }
 }
 
 
-int close_file(FILE* file, char* file_name)
-{
-    errno_t retval;
-    // Close file
-    retval = fclose(file);
-    if (0 != retval)
-    {
-        printf("Failed to close file: %s\n", file_name);
-        return STATUS_CODE_FAILURE;
-    }
-    return SUCCESS_CODE;
-}
 
-
-char* read_line(FILE* file, int* loop)
-{
-    int index = 0, capacity = INITIAL_SIZE;
-    char* buffer;
-    char c;
-
-    if (NULL == (buffer = (char*)malloc(capacity)))
-        return NULL;
-
-    for (c = fgetc(file); c != '\n'; c = fgetc(file))
-    {
-        if (index == capacity - 1)
-        {
-            if (NULL == (buffer = (char*)realloc(buffer, capacity * 2)))
-                return NULL;
-            capacity *= 2;
-        }
-        
-        if (c == EOF) {
-            //close_file(file);
-            *loop = 0;
-            break;
-        }
-        buffer[index++] = c;
-    }
-
-    buffer[index++] = '\n';
-    buffer[index++] = '\0';
-        //close_file(file);
-        return buffer;
+int check_arguments(int argc, char* argv[]) {
     
-}
-
-char* decrypte_line(char* line, int key) {
-
-    int i;
-    char ch;
-    size_t len = strlen(line);
-
-
-    for (i = 0; i < len-1; i++) {
-        ch = *(line + i);
-        if (isdigit(ch)) {
-            ch = '0' + (ch - '0' - key) % 10;
-        }
-        if (isalpha(ch)) {
-            if (islower(ch)) {
-                if ((ch - 'a' - key) < 0) ch += 26;
-                ch = 'a' + (ch - 'a' - key) % 26;
-            }
-            else {
-                if ((ch - 'A' - key) < 0) ch += 26;
-                ch = 'A' + (ch - 'A' - key) % 26;
-            }
-        }
-        *(line + i) = ch;
+    if (argc != ARGS_REQUIRED) {
+        printf("Incorrect number of arguments. %d requird.", ARGS_REQUIRED - 1);
+        printf("\t%d given.", argc - 1);
+        error_handler(ERROR_CODE_ARGS);
     }
+    char* p;
+    errno = 0;
+    long key = strtol(argv[2], &p, 10);
 
-    return line;
+    if (errno != 0 || *p != '\0' || key < 0) {
+        error_handler( ERROR_CODE_ARGS);
+    }
+    else {
+        return 1;
+    }
 }
 
-
-int write_new_line_to_output(FILE* output_file, char* line) {
-    fprintf(output_file, "%s", line);
-    return 0;
-}
 
 
 int main(int argc, char* argv[]){
 
-    // check num of argc
+    // check num of argc and that argv[2] is a number
+    check_arguments(argc, argv);
 
     long key = atoi(argv[2]);
-    // check that argv2 is int
+
     int loop;
     char* line = NULL;
+    int* row_ending = NULL;
     
     FILE* p_input_file = NULL;
     char* in_file_name = argv[1];
     char* in_file_open_type = "r";
 
     FILE* p_output_file = NULL;
-    char* out_file_name = "output.txt";
+    char* out_file_name = "decryped.txt";
     char* out_file_open_type = "w";
 
     // Open file with check
@@ -127,18 +91,21 @@ int main(int argc, char* argv[]){
 
     // Open file with check
     if (NULL == (p_output_file = open_file(p_output_file, out_file_name, out_file_open_type))) return ERROR_CODE_FILE;
+
+    row_ending = count_row_endings(p_input_file);
+
     loop = 1;
     while (loop) {
         line = read_line(p_input_file, &loop);
         line = decrypte_line(line, key);
-        if (0 != write_new_line_to_output(p_output_file, line)) return STATUS_CODE_FAILURE;
+        if (0 != write_new_line_to_output(p_output_file, line)) error_handler(ERROR_CODE_WRITE);
     }
 
     // Close file with check
-    if (close_file(p_input_file, in_file_name) == STATUS_CODE_FAILURE) return ERROR_CODE_FILE;
+    if (close_file(p_input_file, in_file_name) == STATUS_CODE_FAILURE) error_handler(ERROR_CODE_FILE);
 
     // Close file with check
-    if (close_file(p_output_file, out_file_name) == STATUS_CODE_FAILURE) return ERROR_CODE_FILE;
+    if (close_file(p_output_file, out_file_name) == STATUS_CODE_FAILURE) error_handler(ERROR_CODE_FILE);
 
     return 0;
 }

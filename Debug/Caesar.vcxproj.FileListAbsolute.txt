@@ -1,0 +1,2 @@
+C:\Users\iEYAL\source\repos\Caesar\Debug\Caesar.exe
+C:\Users\iEYAL\source\repos\Caesar\Debug\Caesar.pdb

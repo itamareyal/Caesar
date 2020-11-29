@@ -161,12 +161,12 @@ int dispatch_threads(FILE* in_file, FILE* out_file, int key, int threads_require
         }
         else
         {
-            thread_start = rows_endings[i-1]+1;
+            thread_start = *(rows_endings + i - 1) + 1;
         }
 
         // i holds the number of line proccessed
         i += thread_rows;
-        thread_end = rows_endings[i - 1];
+        thread_end = *(rows_endings + i - 1);
         
         // allocate the struct of data to be passed to the thread
         pData = (PTHREADDATA)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(THREADDATA));

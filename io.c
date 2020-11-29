@@ -182,7 +182,7 @@ int close_file(FILE* file, char* file_name)
 int* count_row_endings(FILE* file) {
     
     int index = 0, capacity = 1, char_counting = 0, empty_flag=1;
-    int *row_ending_array, *temp;
+    int *row_ending_array = NULL, *temp = NULL;
     char c;
 
     // allocate memory for the array that holds all locations of row endings
@@ -210,7 +210,7 @@ int* count_row_endings(FILE* file) {
             }
 
             if (c == '\n') {
-                row_ending_array[index] = char_counting;
+                *(row_ending_array + index) = char_counting;
                 index++;
             }
             empty_flag = 0;
@@ -220,10 +220,10 @@ int* count_row_endings(FILE* file) {
             printf("\nInput file is empty. Output will be empty too.\n");
         }
 
-        row_ending_array[index] = char_counting;
+        *(row_ending_array + index) = char_counting;
         index++;
         
-        row_ending_array[index] = '\0';
+        *(row_ending_array + index) = '\0';
     }
     return row_ending_array;
 }
@@ -262,13 +262,13 @@ char* read_line(FILE* file, int* loop)
                 *loop = 0;
                 break;
             }
-            buffer[index++] = c;
+            *(buffer + (index++)) = c;
         }
         if (*loop) {
-            buffer[index++] = '\n';
+            *(buffer + (index++)) = '\n';
 
         }
-        buffer[index++] = '\0';
+        *(buffer + (index++)) = '\0';
     }
     return buffer;
 }

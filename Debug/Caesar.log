@@ -1,9 +1,10 @@
-﻿  io.c
-C:\Users\iEYAL\source\repos\Caesar\io.c(240,49): warning C4244: 'function': conversion from 'double' to 'size_t', possible loss of data
-C:\Users\iEYAL\source\repos\Caesar\io.c(249,59): warning C4244: 'function': conversion from 'double' to 'size_t', possible loss of data
+﻿  decrypte.c
+C:\Users\neomi\source\repos\Caesar\decrypte.c(52,19): warning C4018: '<': signed/unsigned mismatch
+  io.c
+C:\Users\neomi\source\repos\Caesar\io.c(240,49): warning C4244: 'function': conversion from 'double' to 'size_t', possible loss of data
+C:\Users\neomi\source\repos\Caesar\io.c(249,59): warning C4244: 'function': conversion from 'double' to 'size_t', possible loss of data
   main.c
   threadManager.c
-C:\Users\iEYAL\source\repos\Caesar\threadManager.c(155,1): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\neomi\source\repos\Caesar\threadManager.c(155,1): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   Generating Code...
-  LINK : C:\Users\iEYAL\source\repos\Caesar\Debug\Caesar.exe not found or not built by the last incremental link; performing full link
-  Caesar.vcxproj -> C:\Users\iEYAL\source\repos\Caesar\Debug\Caesar.exe
+  Caesar.vcxproj -> C:\Users\neomi\source\repos\Caesar\Debug\Caesar.exe
